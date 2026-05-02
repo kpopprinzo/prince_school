@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prinzo School</title>
+<style>
+body{font-family:Arial;text-align:center;background:#f4f4f4;margin:0}
+header{background:purple;color:white;padding:20px}
+.card{background:white;padding:20px;margin:30px auto;width:80%;max-width:500px;border-radius:10px}
+input,button{padding:12px;margin:10px;font-size:16px}
+button{background:blue;color:white;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id='loginPage'>
+<header><h1>Prinzo School</h1></header>
+<div class='card'>
+<input id='user' placeholder='Username'><br>
+<input id='pass' type='password' placeholder='Password'><br>
+<button onclick='loginNow()'>Login</button>
+</div>
+</div>
+
+<div id='portal' style='display:none'>
+<header><h1>School PDFs</h1></header>
+<div class='card'>
+<div id='uploadArea'></div>
+<div id='pdfList'></div>
+</div>
+</div>
+
+<script>
+const users={neo:'neo123',dineo:'dineo123',teacher:'teach123',admin:'princeschool'};
+let currentUser='';
+let pdfs=[];
+
+function loginNow(){
+const u=document.getElementById('user').value.trim().toLowerCase();
+const p=document.getElementById('pass').value.trim();
+if(users[u]===p){
+currentUser=u;
+document.getElementById('loginPage').style.display='none';
+document.getElementById('portal').style.display='block';
+showPDFs();
+}else{
+alert('Wrong login');
+}
+}
+
+function uploadPDF(){
+const file=document.getElementById('pdfUpload').files[0];
+if(file){
+pdfs.push(URL.createObjectURL(file));
+showPDFs();
+}
+}
+
+function showPDFs(){
+if(currentUser==='teacher'||currentUser==='admin'){
+document.getElementById('uploadArea').innerHTML="<input type='file' id='pdfUpload' accept='.pdf'><br><button onclick='uploadPDF()'>Upload PDF</button>";
+}else{
+document.getElementById('uploadArea').innerHTML='';
+}
+let list='';
+pdfs.forEach((pdf,i)=>{list+=`<p><a href='${pdf}' target='_blank'>PDF ${i+1}</a></p>`});
+document.getElementById('pdfList').innerHTML=list||'No PDFs uploaded';
+}
+</script>
+</body>
+</html>
+
